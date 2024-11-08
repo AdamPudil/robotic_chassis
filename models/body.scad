@@ -9,6 +9,7 @@ motor_height = 10;
 motor_length = 19;
 motor_back_offset = 20;
 motor_holder_width = 32;
+cabel_channel_width = 6;
 
 battery_box_width = 64;
 battery_box_length = 59;
@@ -34,6 +35,11 @@ module body() {
 
     module motor_cutouts() {
         rotate([0, 90, 0]) {
+            // cable shaft
+            channel_length = body_width / 2 - motor_length;
+            translate([0, 0, (- channel_length - motor_length) / 2 ])
+            cube([cabel_channel_width, cabel_channel_width, channel_length], center = true);
+            
             difference() {
                 cylinder(d = motor_d, h = motor_length, center = true);
                 
@@ -52,7 +58,7 @@ module body() {
         cube([battery_box_width, battery_box_length, battery_box_depth], center = true);
     }
     
-    module eletronic_cutout() {
+    module electronic_cutout() {
         cube([eletronic_cutout_width,
               eletronic_cutout_length,
               eletronic_cutout_depth],
