@@ -10,6 +10,11 @@ motor_length = 19;
 motor_back_offset = 20;
 motor_holder_width = 32;
 
+battery_box_width = 64;
+battery_box_length = 59;
+battery_box_depth = 2;
+battery_box_back_offset = 10;
+
 module mirror_copy(vec) {
         mirror(vec) {
             children();
@@ -38,6 +43,10 @@ module body() {
         translate([0, 0, -motor_height / 4])
         cube([motor_length, motor_holder_width, motor_height / 2], center = true);
     }
+    
+    module battery_box_cutout() {
+        cube([battery_box_width, battery_box_length, battery_box_depth], center = true);
+    }
 
     difference() {
         union() {
@@ -48,6 +57,9 @@ module body() {
             translate([(width - motor_length) / 2, length / 2 - motor_back_offset, - (height - motor_height) / 2])
             motor_cutouts();
         }
+        
+        translate([0, (length - battery_box_length) / 2 - battery_box_back_offset, (height - battery_box_depth) / 2])
+            battery_box_cutout();
         
     }
 }
