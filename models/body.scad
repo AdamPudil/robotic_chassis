@@ -20,6 +20,11 @@ eletronic_cutout_width = 36;
 eletronic_cutout_length = 59;
 eletronic_cutout_depth = 22;
 
+ball_wheel_width = 51;
+ball_wheel_length = 25;
+ball_wheel_depth = 9;
+ball_wheel_front_offset = 10;
+
 module mirror_copy(vec) {
         mirror(vec) {
             children();
@@ -58,6 +63,12 @@ module body() {
         cube([battery_box_width, battery_box_length, battery_box_depth], center = true);
     }
     
+    module ball_wheel_cutout() {
+        cube([ball_wheel_width, 
+              ball_wheel_length,
+              ball_wheel_depth], center = true);
+    }
+    
     module electronic_cutout() {
         cube([eletronic_cutout_width,
               eletronic_cutout_length,
@@ -71,7 +82,8 @@ module body() {
         }
             
         mirror_copy([1, 0, 0]) {
-            translate([(width - motor_length) / 2, length / 2 - motor_back_offset, - (height - motor_height) / 2])
+            translate([(width - motor_length) / 2, length / 2 - motor_back_offset,
+            - (height - motor_height) / 2])
             motor_cutouts();
         }
         
@@ -82,6 +94,12 @@ module body() {
                    (length - eletronic_cutout_length) / 2 - battery_box_back_offset,
                    (height - eletronic_cutout_depth) / 2 - battery_box_depth])
             electronic_cutout();
+        
+        translate([0,
+                  (length - ball_wheel_length) / -2 + ball_wheel_front_offset
+                  (height - ball_wheel_depth) / 2
+            ])
+            ball_wheel_cutout();
     }
 }
 
