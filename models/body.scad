@@ -1,7 +1,7 @@
 
 
 body_width = 100;
-body_length = 90;
+body_length = 110;
 body_height = 25;
 
 small_screw_d_thread = 2;
@@ -108,7 +108,7 @@ module body() {
             channel_length = body_width / 2 - motor_length;
 
             translate([0, 0, (- channel_length - motor_length) / 2 ])
-            cube([cabel_channel_width, cabel_channel_width, channel_length], center = true);
+                cube([cabel_channel_width, cabel_channel_width, channel_length], center = true);
             
             difference() {
                 cylinder(d = motor_d, h = motor_length + 2 * tolerance, center = true);
@@ -176,8 +176,8 @@ module body() {
             electronic_cutout();
         
         translate([0,
-                  (length - ball_wheel_length) / -2 + ball_wheel_front_offset
-                  (height - ball_wheel_depth) / 2
+                  (length - ball_wheel_length) / -2 + ball_wheel_front_offset,
+                  (height - ball_wheel_depth) / -2
             ])
             ball_wheel_cutout();
     }
