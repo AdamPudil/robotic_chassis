@@ -32,6 +32,8 @@ ball_wheel_depth = 9;
 ball_wheel_front_offset = 10;
 ball_wheel_screw_distance = 40;
 
+tolerance = 0.2;
+
 module mirror_copy(vec) {
         mirror(vec) {
             children();
@@ -59,11 +61,12 @@ module body() {
         rotate([0, 90, 0]) {
             // cable shaft
             channel_length = body_width / 2 - motor_length;
+
             translate([0, 0, (- channel_length - motor_length) / 2 ])
             cube([cabel_channel_width, cabel_channel_width, channel_length], center = true);
             
             difference() {
-                cylinder(d = motor_d, h = motor_length, center = true);
+                cylinder(d = motor_d, h = motor_length + 2 * tolerance, center = true);
                 
                 mirror_copy([1,0,0]) {
                     translate([(motor_height + 2) / 2, 0, 0])
@@ -78,7 +81,7 @@ module body() {
         }
 
         translate([0, 0, -motor_height / 4])
-        cube([motor_length, motor_holder_width, motor_height / 2], center = true);
+            cube([motor_length + 2 * tolerance, motor_holder_width + 2 * tolerance, motor_height / 2 + tolerance], center = true);
     }
     
     module battery_box_cutout() {
