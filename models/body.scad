@@ -14,8 +14,11 @@ motor_d = 12;
 motor_height = 10;
 motor_length = 19;
 motor_back_offset = 20;
-motor_holder_width = 32;
+
 cabel_channel_width = 6;
+
+motor_holder_width = 32;
+motor_holder_bulge = 16;
 
 battery_box_width = 64;
 battery_box_length = 59;
@@ -51,6 +54,40 @@ module small_screw_thread_cutout() {
     cylinder(d = small_screw_d_thread, h = small_screw_length, center = true);
 }
 
+module motor_holder() {
+    difference() {
+        union() {
+            cube([motor_length, motor_holder_width, motor_height / 2], center = true);
+
+            translate([0,0,motor_height / 4])
+            rotate([0, 90, 0])
+                cylinder(d = motor_holder_bulge, h = motor_length, center = true);
+        }
+
+        translate([0,0,motor_height / 4])
+        rotate([0, 90, 0]) {           
+            difference() {
+                cylinder(d = motor_d, h = motor_length, center = true);
+                    
+                mirror_copy([1,0,0]) {
+                    translate([(motor_height + 2) / 2, 0, 0])
+                    cube([2, motor_d, motor_length], center = true);
+                }
+            }
+        }
+
+        translate([0,0, motor_height / 4 + motor_height / 2])
+            cube([motor_length, motor_holder_width, motor_height], center = true);
+
+        translate([0,0, - motor_holder_bulge / 2 + (motor_d - motor_height) / 2 ])
+            cube([motor_length, motor_holder_width, motor_height / 2], center = true);
+
+        mirror_copy([0, 1, 0])
+        translate([0, motor_holder_width / 2 - 5, (small_screw_length) / 2 + small_screw_head_length - motor_height / 4 ])
+        rotate([0, 180, 0])
+            small_screw_pass_cutout();
+    }
+}
 
 module body() {
     width = body_width;
@@ -133,3 +170,9 @@ module body() {
 }
 
 body();
+
+translate([(body_width - motor_length) / 2,
+            body_length / 2 - motor_back_offset,
+            - (body_height - motor_height) / 2 - motor_height / 4])
+    motor_holder();
+    
