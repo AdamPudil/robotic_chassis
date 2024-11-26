@@ -25,9 +25,9 @@ battery_box_length = 59;
 battery_box_depth = 2;
 battery_box_back_offset = 10;
 
-eletronic_cutout_width = 36;
-eletronic_cutout_length = 59;
-eletronic_cutout_depth = 22;
+electronic_cutout_width = 38;
+electronic_cutout_length = 59;
+electronic_cutout_depth = 22;
 
 ball_wheel_width = 51;
 ball_wheel_length = 25;
@@ -136,9 +136,9 @@ module body() {
     }
     
     module electronic_cutout() {
-        cube([eletronic_cutout_width,
-              eletronic_cutout_length,
-              eletronic_cutout_depth],
+        cube([electronic_cutout_width,
+              electronic_cutout_length,
+              electronic_cutout_depth],
              center = true);
     }
 
@@ -157,8 +157,8 @@ module body() {
             battery_box_cutout();
         
         translate([0,
-                   (length - eletronic_cutout_length) / 2 - battery_box_back_offset,
-                   (height - eletronic_cutout_depth) / 2 - battery_box_depth])
+                   (length - electronic_cutout_length) / 2 - battery_box_back_offset,
+                   (height - electronic_cutout_depth) / 2 - battery_box_depth])
             electronic_cutout();
         
         translate([0,
