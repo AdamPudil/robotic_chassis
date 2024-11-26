@@ -1,2 +1,3 @@
 # OpenSCAD
 models/*.stl
+firmware/wifiCredentials.h
