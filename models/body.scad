@@ -32,6 +32,11 @@ electronic_cutout_width = 38;
 electronic_cutout_length = 59;
 electronic_cutout_depth = 22;
 
+button_cutout_length = 15;
+button_cutout_width =  9;
+button_x_offset = (electronic_cutout_width - button_cutout_width) / 2;
+button_y_offset = -(electronic_cutout_length - button_cutout_length) / 2;
+
 ball_wheel_width = 51;
 ball_wheel_length = 25;
 ball_wheel_depth = 9;
@@ -146,6 +151,9 @@ module body() {
               electronic_cutout_length,
               electronic_cutout_depth],
              center = true);
+
+        translate([button_x_offset, button_y_offset, 0])
+            cube([button_cutout_width, button_cutout_length, body_height], center = true);
     }
 
     difference() {
