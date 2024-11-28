@@ -35,6 +35,11 @@ electronic_cutout_width = 38;
 electronic_cutout_length = 59;
 electronic_cutout_depth = 22;
 
+gyroscope_width = 16;
+gyroscope_length = 27; 
+gyroscope_depth = 5;
+gyroscope_offset = 10;
+
 button_cutout_length = 15;
 button_cutout_width =  9;
 button_x_offset = (electronic_cutout_width - button_cutout_width) / 2;
@@ -183,6 +188,13 @@ module body() {
             cube([button_cutout_width, button_cutout_length, body_height], center = true);
     }
 
+    module gyroscope_cutout() {
+        cube([gyroscope_width,
+              gyroscope_length, 
+              gyroscope_depth], 
+             center = true);
+    }
+
     difference() {
         union() {
             cube([width, length, height], center = true);
@@ -213,6 +225,11 @@ module body() {
                    (length - electronic_cutout_length) / 2 - battery_box_back_offset,
                    (height - electronic_cutout_depth) / 2 - battery_box_depth])
             electronic_cutout();
+
+        translate([ (electronic_cutout_width - gyroscope_width) / 2 + gyroscope_offset,
+                    (length - gyroscope_length) / 2 - battery_box_back_offset,
+                    (height - gyroscope_depth) / 2 - battery_box_depth])
+            gyroscope_cutout();
         
         translate([0,
                   (length - ball_wheel_length) / -2 + ball_wheel_front_offset,
