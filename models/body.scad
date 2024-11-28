@@ -116,6 +116,18 @@ module body() {
         }
     }
 
+    module side_cutouts() {
+        linear_extrude(height, [0, 0, 1], center = true)
+        polygon([
+            [body_width / 2, -body_length / 2],
+            [battery_box_width / 2, -body_length / 2], 
+            [battery_box_width / 2, body_length / 2 - battery_box_back_offset - battery_box_length - battery_box_wall_width],
+            [battery_box_width / 2 + battery_box_wall_width, body_length / 2 - battery_box_back_offset - battery_box_length],
+            [battery_box_width / 2 + battery_box_wall_width, body_length / 2 - 2 * motor_back_offset],
+            [width / 2, body_length / 2 - 2 * motor_back_offset],
+        ]);
+    }
+
     module motor_cutouts() {
         rotate([0, 90, 0]) {
             // cable shaft
@@ -182,6 +194,10 @@ module body() {
         mirror_copy([1, 0, 0]) {
             translate([battery_box_width / 2 - battery_box_rounding_r,0, height / 2 + battery_box_height - battery_box_rounding_r])
                 top_rounding();
+        }
+
+        mirror_copy([1, 0, 0]) {
+            side_cutouts();
         }
 
         mirror_copy([1, 0, 0]) {
