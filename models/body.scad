@@ -42,7 +42,7 @@ button_y_offset = -(electronic_cutout_length - button_cutout_length) / 2;
 
 ball_wheel_width = 51;
 ball_wheel_length = 25;
-ball_wheel_depth = 9;
+ball_wheel_depth = 3;
 ball_wheel_front_offset = 10;
 ball_wheel_screw_distance = 40;
 
