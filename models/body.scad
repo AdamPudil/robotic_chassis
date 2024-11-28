@@ -51,6 +51,10 @@ ball_wheel_depth = 3;
 ball_wheel_front_offset = 10;
 ball_wheel_screw_distance = 40;
 
+front_width = 36;
+front_angle = 30;
+front_cutout_depth = tan(front_angle) * (battery_box_width - front_width) / 2;
+
 tolerance = 0.2;
 
 module mirror_copy(vec) {
@@ -122,10 +126,12 @@ module body() {
     }
 
     module side_cutouts() {
-        linear_extrude(height, [0, 0, 1], center = true)
+        translate([0, 0, battery_box_height / 2])
+        linear_extrude(height + battery_box_height, [0, 0, 1], center = true)
         polygon([
             [body_width / 2, -body_length / 2],
-            [battery_box_width / 2, -body_length / 2], 
+            [front_width / 2, -body_length / 2],
+            [battery_box_width / 2, -body_length / 2 + front_cutout_depth], 
             [battery_box_width / 2, body_length / 2 - battery_box_back_offset - battery_box_length - battery_box_wall_width],
             [battery_box_width / 2 + battery_box_wall_width, body_length / 2 - battery_box_back_offset - battery_box_length],
             [battery_box_width / 2 + battery_box_wall_width, body_length / 2 - 2 * motor_back_offset],
