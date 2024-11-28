@@ -81,7 +81,7 @@ module motor_holder() {
                 cylinder(d = motor_d, h = motor_length, center = true);
                     
                 mirror_copy([1,0,0]) {
-                    translate([(motor_height + 2) / 2, 0, 0])
+                    translate([(motor_height + 2) / 2 + tolerance, 0, 0])
                     cube([2, motor_d, motor_length], center = true);
                 }
             }
@@ -128,7 +128,7 @@ module body() {
                 cylinder(d = motor_d, h = motor_length + 2 * tolerance, center = true);
                 
                 mirror_copy([1,0,0]) {
-                    translate([(motor_height + 2) / 2, 0, 0])
+                    translate([(motor_height + 2) / 2 + tolerance, 0, 0])
                     cube([2, motor_d, motor_length], center = true);
                 }
             }
