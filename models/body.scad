@@ -23,10 +23,13 @@ motor_holder_bulge = 16;
 battery_box_width = 64;
 battery_box_length = 59;
 battery_box_depth = 2;
+battery_box_height = 14;
+battery_box_rounding_r = 5;
 battery_box_back_offset = 10;
 battery_box_cable_width = 12;
 battery_box_cable_length = 5;
-battery_box_cable_offset = 10; 
+battery_box_cable_offset = 10;
+battery_box_wall_width = 5;
 
 electronic_cutout_width = 38;
 electronic_cutout_length = 59;
@@ -102,6 +105,17 @@ module body() {
     length = body_length;
     height = body_height;
 
+    module top_rounding() {
+        rotate([90, 0, 0]) {
+            difference() {
+                translate([battery_box_rounding_r / 2, battery_box_rounding_r / 2, 0])
+                    cube([battery_box_rounding_r, battery_box_rounding_r, body_length], center = true);
+
+                cylinder(r = battery_box_rounding_r, h = body_length, center=true);
+            }
+        }
+    }
+
     module motor_cutouts() {
         rotate([0, 90, 0]) {
             // cable shaft
@@ -130,7 +144,8 @@ module body() {
     }
     
     module battery_box_cutout() {
-        cube([battery_box_width, battery_box_length, battery_box_depth], center = true);
+        translate([0,0, battery_box_height / 2])
+            cube([battery_box_width, battery_box_length, battery_box_depth + battery_box_height], center = true);
 
         translate([- battery_box_width / 2 + battery_box_cable_offset + battery_box_cable_width / 2, - battery_box_length / 2, 0])
             cube([battery_box_cable_width, battery_box_cable_length, electronic_cutout_depth], center = true);
@@ -159,8 +174,16 @@ module body() {
     difference() {
         union() {
             cube([width, length, height], center = true);
+
+            translate([0, 0, (height + battery_box_height) / 2])
+                cube([battery_box_width, length, battery_box_height], center = true);
         }
             
+        mirror_copy([1, 0, 0]) {
+            translate([battery_box_width / 2 - battery_box_rounding_r,0, height / 2 + battery_box_height - battery_box_rounding_r])
+                top_rounding();
+        }
+
         mirror_copy([1, 0, 0]) {
             translate([(width - motor_length) / 2, length / 2 - motor_back_offset,
             - (height - motor_height) / 2])
