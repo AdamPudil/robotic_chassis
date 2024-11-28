@@ -20,6 +20,12 @@ cabel_channel_width = 6;
 motor_holder_width = 32;
 motor_holder_bulge = 16;
 
+ball_wheel_width = 51;
+ball_wheel_length = 25;
+ball_wheel_depth = 3;
+ball_wheel_front_offset = 10;
+ball_wheel_screw_distance = 40;
+
 battery_box_width = 64;
 battery_box_length = 59;
 battery_box_depth = 2;
@@ -31,9 +37,20 @@ battery_box_cable_length = 5;
 battery_box_cable_offset = 10;
 battery_box_wall_width = 5;
 
+front_width = 36;
+front_angle = 30;
+front_cutout_depth = tan(front_angle) * (battery_box_width - front_width) / 2;
+
 electronic_cutout_width = 38;
 electronic_cutout_length = 59;
 electronic_cutout_depth = 22;
+
+i2c_mux_cutout_width = electronic_cutout_width;
+i2c_mux_cutout_wall_thick = 5;
+i2c_mux_cutout_length = body_length - 2 * i2c_mux_cutout_wall_thick - battery_box_length - battery_box_back_offset - front_cutout_depth;
+i2c_mux_cutout_depth = body_height + battery_box_height - ball_wheel_depth - small_screw_length - i2c_mux_cutout_wall_thick;
+i2c_mux_lid_offset = 3;
+i2c_mux_lid_depth = 3; 
 
 gyroscope_width = 16;
 gyroscope_length = 27; 
@@ -44,16 +61,6 @@ button_cutout_length = 15;
 button_cutout_width =  9;
 button_x_offset = (electronic_cutout_width - button_cutout_width) / 2;
 button_y_offset = -(electronic_cutout_length - button_cutout_length) / 2;
-
-ball_wheel_width = 51;
-ball_wheel_length = 25;
-ball_wheel_depth = 3;
-ball_wheel_front_offset = 10;
-ball_wheel_screw_distance = 40;
-
-front_width = 36;
-front_angle = 30;
-front_cutout_depth = tan(front_angle) * (battery_box_width - front_width) / 2;
 
 tolerance = 0.2;
 
@@ -201,6 +208,21 @@ module body() {
              center = true);
     }
 
+    module i2c_mux_cutout() {
+        cube([
+            i2c_mux_cutout_width,
+            i2c_mux_cutout_length,
+            i2c_mux_cutout_depth
+        ], center = true);
+
+        translate([0,0, (i2c_mux_cutout_depth - i2c_mux_lid_depth)/ 2])
+        cube([
+            i2c_mux_cutout_width + 2 * i2c_mux_lid_offset,
+            i2c_mux_cutout_length + 2 * i2c_mux_lid_offset,
+            i2c_mux_lid_depth, 
+        ], center = true);
+    }
+
     difference() {
         union() {
             cube([width, length, height], center = true);
@@ -236,7 +258,13 @@ module body() {
                     (length - gyroscope_length) / 2 - battery_box_back_offset,
                     (height - gyroscope_depth) / 2 - battery_box_depth])
             gyroscope_cutout();
-        
+
+        translate([0,
+                   - (length / 2 - front_cutout_depth - i2c_mux_cutout_wall_thick - i2c_mux_cutout_length / 2),
+                   (height / 2 + battery_box_height - i2c_mux_cutout_depth / 2)
+        ])
+        i2c_mux_cutout();
+
         translate([0,
                   (length - ball_wheel_length) / -2 + ball_wheel_front_offset,
                   (height - ball_wheel_depth) / -2
