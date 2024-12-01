@@ -52,6 +52,14 @@ i2c_mux_cutout_depth = body_height + battery_box_height - ball_wheel_depth - sma
 i2c_mux_lid_offset = 3;
 i2c_mux_lid_depth = 3; 
 
+laser_cutout_width = 11;
+laser_cutout_length = 15;
+laser_cutout_depth = 3;
+laser_cutout_offset = 4;
+laser_cutout_z_offset = 5;
+laser_cable_width = 4;
+laser_cable_lenght = 15;
+
 gyroscope_width = 16;
 gyroscope_length = 27; 
 gyroscope_depth = 5;
@@ -223,6 +231,28 @@ module body() {
         ], center = true);
     }
 
+    module laser_cutout() {
+        translate([0, laser_cutout_depth / 2, 0])
+            cube([laser_cutout_width, laser_cutout_depth, laser_cutout_length], center = true);
+        translate([0, laser_cable_lenght / 2 + laser_cutout_depth, (laser_cutout_length - laser_cable_width) / 2])
+            cube([laser_cutout_width, laser_cable_lenght, laser_cable_width], center = true);
+    }
+
+    module all_lasers_cutout() {
+        translate([(front_width - laser_cutout_width) / 2 - laser_cutout_offset, - length / 2, laser_cutout_z_offset])
+            laser_cutout();
+
+        mirror_copy([1,0,0])
+        translate([battery_box_width / 2 , - length / 2 + front_cutout_depth + laser_cutout_width / 2 + laser_cutout_offset, laser_cutout_z_offset])
+        rotate([0, 0, 90])
+            laser_cutout();
+
+        mirror_copy([1,0,0])
+        translate([(battery_box_width + front_width) / 4  , (- length + front_cutout_depth) / 2 , laser_cutout_z_offset])
+        rotate([0, 0, front_angle])
+            laser_cutout();
+    }
+
     difference() {
         union() {
             cube([width, length, height], center = true);
@@ -264,6 +294,8 @@ module body() {
                    (height / 2 + battery_box_height - i2c_mux_cutout_depth / 2)
         ])
         i2c_mux_cutout();
+
+        all_lasers_cutout();
 
         translate([0,
                   (length - ball_wheel_length) / -2 + ball_wheel_front_offset,
