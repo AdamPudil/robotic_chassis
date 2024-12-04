@@ -47,16 +47,22 @@ electronic_cutout_depth = 22;
 
 i2c_mux_cutout_width = electronic_cutout_width;
 i2c_mux_cutout_wall_thick = 5;
-i2c_mux_cutout_length = body_length - 2 * i2c_mux_cutout_wall_thick - battery_box_length - battery_box_back_offset - front_cutout_depth;
-i2c_mux_cutout_depth = body_height + battery_box_height - ball_wheel_depth - small_screw_length - i2c_mux_cutout_wall_thick;
+i2c_mux_cutout_bottom_wall = 2;
+i2c_mux_cutout_front_offset = 3;
+i2c_mux_cutout_length = body_length - 2 * i2c_mux_cutout_wall_thick - battery_box_length - battery_box_back_offset - front_cutout_depth + i2c_mux_cutout_front_offset;
+i2c_mux_cutout_depth = body_height + battery_box_height - ball_wheel_depth - small_screw_length - i2c_mux_cutout_bottom_wall;
 i2c_mux_lid_offset = 3;
 i2c_mux_lid_depth = 3; 
+
+i2c_mux_cable_cutout_width = 11;
+i2c_mux_cable_cutout_length = 10;
 
 laser_cutout_width = 11;
 laser_cutout_length = 15;
 laser_cutout_depth = 3;
 laser_cutout_offset = 4;
 laser_cutout_z_offset = 5;
+
 laser_cable_width = 4;
 laser_cable_lenght = 15;
 
@@ -223,6 +229,17 @@ module body() {
             i2c_mux_cutout_depth
         ], center = true);
 
+        translate([
+            (i2c_mux_cutout_width - i2c_mux_cable_cutout_width) / 2,
+            (i2c_mux_cutout_length + i2c_mux_cable_cutout_length) / 2,
+            -(i2c_mux_cutout_depth - i2c_mux_cable_cutout_width) / 2
+        ])
+        cube([
+            i2c_mux_cable_cutout_width,
+            i2c_mux_cable_cutout_length,
+            i2c_mux_cable_cutout_width
+        ], center=true);
+
         translate([0,0, (i2c_mux_cutout_depth - i2c_mux_lid_depth)/ 2])
         cube([
             i2c_mux_cutout_width + 2 * i2c_mux_lid_offset,
@@ -290,7 +307,7 @@ module body() {
             gyroscope_cutout();
 
         translate([0,
-                   - (length / 2 - front_cutout_depth - i2c_mux_cutout_wall_thick - i2c_mux_cutout_length / 2),
+                   - (length / 2 - front_cutout_depth - i2c_mux_cutout_wall_thick - i2c_mux_cutout_length / 2) - i2c_mux_cutout_front_offset,
                    (height / 2 + battery_box_height - i2c_mux_cutout_depth / 2)
         ])
         i2c_mux_cutout();
