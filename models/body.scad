@@ -25,6 +25,7 @@ ball_wheel_length = 25;
 ball_wheel_depth = 3;
 ball_wheel_front_offset = 10;
 ball_wheel_screw_distance = 40;
+ball_wheel_height = 17;
 
 battery_box_width = 64;
 battery_box_length = 59;
@@ -61,7 +62,12 @@ laser_cutout_width = 11;
 laser_cutout_length = 15;
 laser_cutout_depth = 3;
 laser_cutout_offset = 4;
-laser_cutout_z_offset = 5;
+laser_cutout_z_offset = 2;
+
+laser_floor_range = 75;
+laser_floor_tan_angle = (ball_wheel_height + laser_cutout_z_offset) / laser_floor_range;
+laser_floor_bottom_offset = laser_cutout_length * laser_floor_tan_angle;
+laser_floor_front_offset = (laser_floor_bottom_offset + laser_cutout_depth) * laser_floor_tan_angle;
 
 laser_cable_width = 4;
 laser_cable_lenght = 15;
@@ -255,9 +261,25 @@ module body() {
             cube([laser_cutout_width, laser_cable_lenght, laser_cable_width], center = true);
     }
 
+    module floor_laser_cutout() {
+        rotate([0, -90, 0])
+            linear_extrude(laser_cutout_width, [1,0,0], center = true)
+            polygon([
+                [laser_cutout_length / 2, 0],
+                [laser_cutout_length / 2, laser_cutout_depth],
+                [- laser_cutout_length / 2, laser_cutout_depth + laser_floor_bottom_offset],
+                [- laser_cutout_length / 2 - laser_floor_front_offset, 0]
+            ]);
+        translate([0, laser_cable_lenght / 2 + laser_cutout_depth, (laser_cutout_length - laser_cable_width) / 2])
+            cube([laser_cutout_width, laser_cable_lenght, laser_cable_width], center = true);
+    }
+
     module all_lasers_cutout() {
         translate([(front_width - laser_cutout_width) / 2 - laser_cutout_offset, - length / 2, laser_cutout_z_offset])
             laser_cutout();
+
+        translate([- (front_width - laser_cutout_width) / 2 + laser_cutout_offset, - length / 2, laser_cutout_z_offset])
+            floor_laser_cutout();
 
         mirror_copy([1,0,0])
         translate([battery_box_width / 2 , - length / 2 + front_cutout_depth + laser_cutout_width / 2 + laser_cutout_offset, laser_cutout_z_offset])
